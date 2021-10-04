@@ -76,7 +76,6 @@ class HomeActivity : AppCompatActivity(), OnMovieClickListener {
 
         movieViewModel.searchMovie(BuildConfig.API_KEY, keyWord)
         movieViewModel.movieSearchMutableLiveData.observe(this, {
-            Log.d("TAG", "searchByName: $it")
             movieAdapter.setMovieList(it.results)
         })
 
@@ -96,7 +95,6 @@ fun getPopularMovie()
         movieViewModel.getAllMovies(BuildConfig.API_KEY)
         movieViewModel.allMoviesMutableLiveData.observe(this,
             {
-                Log.d("TAG", "initViews: $it")
                 movieAdapter.setMovieList(it.results)
 
             })

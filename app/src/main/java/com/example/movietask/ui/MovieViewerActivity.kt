@@ -32,7 +32,6 @@ class MovieViewerActivity : AppCompatActivity() {
         movieViewerBinding = DataBindingUtil.setContentView(this, R.layout.activity_movie_viewer)
         intent?.let {
             val result = it.getStringExtra(HomeActivity.MOVIE_RESUTL)
-            Log.d("TAG", "onCreate: $result")
             val movieResult = MovieResultConverter().convertToResult(result!!)
             setUpData(movieResult)
         }
