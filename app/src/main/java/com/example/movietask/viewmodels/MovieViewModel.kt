@@ -21,7 +21,6 @@ class MovieViewModel(private val repository: MovieRepository) : ViewModel() {
 
         viewModelScope.launch(Dispatchers.IO) {
             val allMovies = repository.getAllMovies(apiKey)
-            Log.d("TAG", "getAllMovies: $allMovies")
             withContext(Dispatchers.Main)
             {
                 allMoviesMutableLiveData.value = allMovies

@@ -7,7 +7,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MovieApiService {
-//Base URL  https://api.themoviedb.org/3/movie/
 
     @GET("movie/popular")
     suspend fun getAllMovies(
@@ -21,7 +20,6 @@ interface MovieApiService {
         @Query("query") searchQuery: String,
     ): Movies
 
-    //https://api.themoviedb.org/3/movie/681887/videos?api_key=e9cd58edf21c2107fc8a33ed86221ecc
     @GET("movie/{path}/videos")
     suspend fun getMovieTrailerData(
         @Path("path") id: Int,

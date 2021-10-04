@@ -39,7 +39,7 @@ class HomeActivity : AppCompatActivity(), OnMovieClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("TAG", "onCreate: ")
+
         fragementHomeBinding = DataBindingUtil.setContentView(this, R.layout.fragement_home)
         initViews()
 
