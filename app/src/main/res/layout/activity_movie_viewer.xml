@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.MovieViewerActivity">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/movieViewActivity_toolBar"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@color/red_color_1"
+                    app:navigationIcon="@drawable/ic_baseline_arrow_back_ios_24"
+                    app:titleTextColor="@color/white" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    >
+
+                    <ImageView
+                        android:id="@+id/movieViewActivity_mainPosterImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_150sdp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/cap"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/movieViewActivity_secondPosterImage"
+                        android:layout_width="@dimen/_100sdp"
+                        android:layout_height="@dimen/_100sdp"
+                        android:layout_marginStart="@dimen/_5sdp"
+
+                        android:layout_marginTop="-50dp"
+
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/cap"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/movieViewActivity_mainPosterImage" />
+
+
+                    <TextView
+                        android:id="@+id/movieViewActivity_img_youtubePlayer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_28sdp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:background="@drawable/youtube_buttom"
+                        android:drawableEnd="@drawable/youtube_ic"
+                        android:drawablePadding="@dimen/_5sdp"
+                        android:padding="@dimen/_4sdp"
+                        android:text="Watch Trailer"
+                        android:textSize="@dimen/_16sdp"
+                        app:layout_constraintStart_toEndOf="@id/movieViewActivity_secondPosterImage"
+
+                        app:layout_constraintTop_toBottomOf="@id/movieViewActivity_mainPosterImage" />
+
+                    <TextView
+                        android:id="@+id/movieViewActivity_TV_movieName"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/app_name"
+                        android:textColor="@color/red_color_1"
+                        android:textSize="@dimen/_20sdp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/movieViewActivity_secondPosterImage" />
+
+                    <TextView
+                        android:id="@+id/movieViewActivity_TV_moviePupblishData"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:text="@string/app_name"
+                        android:textColor="@color/red_color_1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        app:layout_constraintTop_toBottomOf="@id/movieViewActivity_TV_movieName" />
+                    <TextView
+                        android:id="@+id/movieViewActivity_TV_movieRate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_15sdp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:text="90"
+                        android:textColor="@color/red_color_1"
+                        app:layout_constraintStart_toEndOf="@id/movieViewActivity_TV_moviePupblishData"
+                        app:layout_constraintTop_toBottomOf="@id/movieViewActivity_TV_movieName"
+
+                        />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_star_rate_24"
+                        app:tint="@color/yellow"
+                        app:layout_constraintStart_toEndOf="@id/movieViewActivity_TV_movieRate"
+                        app:layout_constraintTop_toTopOf="@id/movieViewActivity_TV_movieRate"
+                        android:layout_marginTop="-10dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/movieViewActivity_TV_movieDetails"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_5sdp"
+
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/_14sdp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/movieViewActivity_TV_moviePupblishData" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
