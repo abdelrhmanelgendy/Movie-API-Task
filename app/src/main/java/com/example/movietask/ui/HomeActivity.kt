@@ -33,6 +33,7 @@ class HomeActivity : AppCompatActivity(), OnMovieClickListener {
     lateinit var fragementHomeBinding: FragementHomeBinding
     lateinit var gridLayoutManager: GridLayoutManager
     lateinit var movieAdapter: MovieAdapter
+    val API_Key by lazy { resources.getString(R.string.API_KEY) }
     val movieViewModel: MovieViewModel by lazy {
         getViewModel<MovieViewModel>()
     }
@@ -74,7 +75,7 @@ class HomeActivity : AppCompatActivity(), OnMovieClickListener {
 
     private fun searchByName(keyWord: String) {
 
-        movieViewModel.searchMovie(BuildConfig.API_KEY, keyWord)
+        movieViewModel.searchMovie(API_Key, keyWord)
         movieViewModel.movieSearchMutableLiveData.observe(this, {
             movieAdapter.setMovieList(it.results)
         })
@@ -90,9 +91,9 @@ class HomeActivity : AppCompatActivity(), OnMovieClickListener {
         startActivity(movieViewerIntetn)
 
     }
-fun getPopularMovie()
-    {
-        movieViewModel.getAllMovies(BuildConfig.API_KEY)
+
+    fun getPopularMovie() {
+        movieViewModel.getAllMovies(API_Key)
         movieViewModel.allMoviesMutableLiveData.observe(this,
             {
                 movieAdapter.setMovieList(it.results)

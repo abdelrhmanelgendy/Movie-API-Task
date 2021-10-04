@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Movie Task</string>
     <string name="search">search by movie name</string>
+    <string name="API_KEY">e9cd58edf21c2107fc8a33ed86221ecc</string>
 </resources>

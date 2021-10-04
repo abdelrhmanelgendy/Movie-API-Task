@@ -26,7 +26,7 @@ class MovieViewerActivity : AppCompatActivity() {
     val movieViewModel by lazy {
         getViewModel<MovieViewModel>()
     }
-
+    val API_Key by lazy { resources.getString(R.string.API_KEY) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         movieViewerBinding = DataBindingUtil.setContentView(this, R.layout.activity_movie_viewer)
@@ -63,7 +63,7 @@ class MovieViewerActivity : AppCompatActivity() {
 
     private fun openYoutubePlayer(id: Int) {
 
-        movieViewModel.findMovieTrailer(BuildConfig.API_KEY, id)
+        movieViewModel.findMovieTrailer(API_Key, id)
         movieViewModel.movieTrailer.observe(this, {
             val intent = Intent(this, MovieTrailerActivity::class.java)
             intent.putExtra(videoUrl,it.results.get(0).key)
