@@ -2,6 +2,8 @@
 Using IMB to create simple app contains ->.
 <ul>
   <li>Architecture patterns "MVVM"</li>
+  <li>StateFlow</li>
+  <li>Recycler View Pagination</li>
   <li><b>Koin Dependency injection</b></li>
   <li><b>Repository Pattern</b></li>
   <li><b>Youtube Video Player</b></li>
