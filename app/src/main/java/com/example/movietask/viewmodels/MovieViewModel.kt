@@ -17,10 +17,10 @@ class MovieViewModel(private val repository: MovieRepository) : ViewModel() {
     val allMoviesMutableLiveData: MutableLiveData<Movies> = MutableLiveData()
     val movieTrailer: MutableLiveData<MovieTrailer> = MutableLiveData()
 
-    fun getAllMovies(apiKey: String) {
+    fun getAllMovies(apiKey: String,pageNumber:String) {
 
         viewModelScope.launch(Dispatchers.IO) {
-            val allMovies = repository.getAllMovies(apiKey)
+            val allMovies = repository.getAllMovies(apiKey,pageNumber)
             withContext(Dispatchers.Main)
             {
                 allMoviesMutableLiveData.value = allMovies

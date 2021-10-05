@@ -20,6 +20,7 @@ import com.example.movietask.databinding.FragementHomeBinding
 import com.example.movietask.models.Result
 
 import com.example.movietask.util.OnMovieClickListener
+import com.example.movietask.util.PaginationScrollListener
 import com.example.movietask.viewmodels.MovieViewModel
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.getViewModel
@@ -37,6 +38,7 @@ class HomeActivity : AppCompatActivity(), OnMovieClickListener {
     val movieViewModel: MovieViewModel by lazy {
         getViewModel<MovieViewModel>()
     }
+    var firstPageNumber =1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,13 +73,36 @@ class HomeActivity : AppCompatActivity(), OnMovieClickListener {
             }
 
         })
+        var isLastPage: Boolean = false
+        var isLoading: Boolean = false
+
+        fragementHomeBinding.homeFragmentRecyclerView.addOnScrollListener(object :
+            PaginationScrollListener(gridLayoutManager) {
+            override fun isLastPage(): Boolean {
+                return isLastPage
+            }
+
+            override fun isLoading(): Boolean {
+                return isLoading
+            }
+
+            override fun loadMoreItems() {
+                isLoading = true
+                Log.d("TAG", "loadMoreItems: ")
+                firstPageNumber++
+                getPopularMovieByPage(firstPageNumber.toString())
+                //you have to call loadmore items to get more data
+//                getMoreItems()
+            }
+        })
     }
 
     private fun searchByName(keyWord: String) {
 
         movieViewModel.searchMovie(API_Key, keyWord)
         movieViewModel.movieSearchMutableLiveData.observe(this, {
-            movieAdapter.setMovieList(it.results)
+            movieAdapter.movieList=it.results
+            movieAdapter.notifyDataSetChanged()
         })
 
 
@@ -93,12 +118,28 @@ class HomeActivity : AppCompatActivity(), OnMovieClickListener {
     }
 
     fun getPopularMovie() {
-        movieViewModel.getAllMovies(API_Key)
+        movieViewModel.getAllMovies(API_Key,"1")
         movieViewModel.allMoviesMutableLiveData.observe(this,
             {
-                movieAdapter.setMovieList(it.results)
+                movieAdapter.movieList=it.results
+                movieAdapter.notifyDataSetChanged()
 
             })
+    }
+    fun getPopularMovieByPage(pageNumber:String) {
+        movieViewModel.getAllMovies(API_Key,pageNumber)
+        movieViewModel.allMoviesMutableLiveData.observe(this,
+            {
+               addData(it.results)
+
+            })
+    }
+
+
+    fun addData(listItems: List<Result>) {
+        movieAdapter.movieList.toMutableList().addAll(listItems)
+        movieAdapter.notifyDataSetChanged()
+
     }
 
 }

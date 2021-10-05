@@ -11,6 +11,7 @@ interface MovieApiService {
     @GET("movie/popular")
     suspend fun getAllMovies(
         @Query("api_key") apiKey: String,
+        @Query("page") pageNumber: String,
 
     ): Movies
 

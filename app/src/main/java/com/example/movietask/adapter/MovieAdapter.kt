@@ -17,11 +17,8 @@ const val restOfUrl = "https://image.tmdb.org/t/p/w500/"
 class MovieAdapter(var context: Context, var onMovieClickListener: OnMovieClickListener) :
     RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
-    private var movieList: List<Result> = arrayListOf()
-    public fun setMovieList(resultList: List<Result>) {
-        movieList = resultList
-        notifyDataSetChanged()
-    }
+    var movieList: List<Result> = arrayListOf()
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.movie_item, null)

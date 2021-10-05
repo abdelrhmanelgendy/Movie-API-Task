@@ -5,8 +5,8 @@ import com.example.movietask.models.Movies
 import com.example.movietask.network.MovieApiService
 
 class MovieRepository(var movieApiService: MovieApiService) {
-    suspend fun getAllMovies(apiKey: String): Movies {
-        return movieApiService.getAllMovies(apiKey)
+    suspend fun getAllMovies(apiKey: String,pageNumber:String): Movies {
+        return movieApiService.getAllMovies(apiKey,pageNumber)
     }
 
     suspend fun searchForMovie(apiKey: String, searchQuery: String): Movies {
