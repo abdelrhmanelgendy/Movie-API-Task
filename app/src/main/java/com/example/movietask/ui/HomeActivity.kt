@@ -40,7 +40,7 @@ class HomeActivity : AppCompatActivity(), OnMovieClickListener {
     lateinit var movieAdapter: MovieAdapter
     val API_Key by lazy { resources.getString(R.string.API_KEY) }
     val movieViewModel: MovieViewModel by lazy {
-        getViewModel<MovieViewModel>()
+        getViewModel()
     }
     var pageNumber= 1;
 
