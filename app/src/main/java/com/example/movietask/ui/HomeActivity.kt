@@ -4,25 +4,29 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
+import android.view.View
 
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.NestedScrollView
 
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.movietask.BuildConfig
 
 import com.example.movietask.R
 import com.example.movietask.adapter.MovieAdapter
 import com.example.movietask.converters.MovieResultConverter
 import com.example.movietask.databinding.FragementHomeBinding
 import com.example.movietask.models.Result
+import com.example.movietask.util.DataClasses
 
 import com.example.movietask.util.OnMovieClickListener
-import com.example.movietask.util.PaginationScrollListener
 import com.example.movietask.viewmodels.MovieViewModel
-import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 
@@ -38,7 +42,7 @@ class HomeActivity : AppCompatActivity(), OnMovieClickListener {
     val movieViewModel: MovieViewModel by lazy {
         getViewModel<MovieViewModel>()
     }
-    var firstPageNumber =1
+    var pageNumber= 1;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,12 +55,18 @@ class HomeActivity : AppCompatActivity(), OnMovieClickListener {
 
     private fun initViews() {
 
+        fragementHomeBinding.homeFragmentRecyclerView.also {
+            it.setHasFixedSize(true)
+            it.isNestedScrollingEnabled = false;
+        }
         gridLayoutManager =
             GridLayoutManager(applicationContext, 2)
         movieAdapter = MovieAdapter(applicationContext, this)
+        movieAdapter.setHasStableIds(true)
         fragementHomeBinding.homeFragmentRecyclerView.adapter = movieAdapter
         fragementHomeBinding.homeFragmentRecyclerView.layoutManager = gridLayoutManager
         fragementHomeBinding.homeFragmentImgClearSearch.setOnClickListener {
+            movieAdapter.movieList.clear()
             getPopularMovie()
             fragementHomeBinding.homeFragmentETSearch.setText("")
         }
@@ -73,37 +83,48 @@ class HomeActivity : AppCompatActivity(), OnMovieClickListener {
             }
 
         })
-        var isLastPage: Boolean = false
-        var isLoading: Boolean = false
+        createRecyclerViewPagination()
+    }
 
-        fragementHomeBinding.homeFragmentRecyclerView.addOnScrollListener(object :
-            PaginationScrollListener(gridLayoutManager) {
-            override fun isLastPage(): Boolean {
-                return isLastPage
+    private fun createRecyclerViewPagination() {
+        fragementHomeBinding.homeFragmentNastedScrollView.setOnScrollChangeListener(object :
+            NestedScrollView.OnScrollChangeListener {
+            override fun onScrollChange(
+                v: NestedScrollView?,
+                scrollX: Int,
+                scrollY: Int,
+                oldScrollX: Int,
+                oldScrollY: Int
+            ) {
+                if (scrollY == v!!.getChildAt(0).measuredHeight - v.measuredHeight) {
+                    getMoreData()
+                }
             }
 
-            override fun isLoading(): Boolean {
-                return isLoading
-            }
-
-            override fun loadMoreItems() {
-                isLoading = true
-                Log.d("TAG", "loadMoreItems: ")
-                firstPageNumber++
-                getPopularMovieByPage(firstPageNumber.toString())
-                //you have to call loadmore items to get more data
-//                getMoreItems()
-            }
         })
+
+    }
+
+    private fun getMoreData() {
+
+        pageNumber++
+        movieViewModel.getAllMovies(API_Key, pageNumber.toString())
+
+
+
     }
 
     private fun searchByName(keyWord: String) {
 
-        movieViewModel.searchMovie(API_Key, keyWord)
-        movieViewModel.movieSearchMutableLiveData.observe(this, {
-            movieAdapter.movieList=it.results
-            movieAdapter.notifyDataSetChanged()
-        })
+        movieViewModel.searchMovie(API_Key, keyWord,"1")
+        lifecycleScope.launch(Dispatchers.Main) {
+            movieViewModel.popularMovieStateFlow.collect {
+                if (it!=DataClasses.getMovie())
+                {
+                    movieAdapter.setMovieListAndDeleteOld(it.results)
+                }
+            }
+        }
 
 
     }
@@ -118,28 +139,18 @@ class HomeActivity : AppCompatActivity(), OnMovieClickListener {
     }
 
     fun getPopularMovie() {
-        movieViewModel.getAllMovies(API_Key,"1")
-        movieViewModel.allMoviesMutableLiveData.observe(this,
-            {
-                movieAdapter.movieList=it.results
-                movieAdapter.notifyDataSetChanged()
+        movieViewModel.getAllMovies(API_Key, "1")
+        lifecycleScope.launch(Dispatchers.Main) {
+            movieViewModel.seacrMovieStateFlow.collect() {
+                if (it != DataClasses.getMovie()) {
+                    movieAdapter.setMovieList(it.results)
+                }
 
-            })
-    }
-    fun getPopularMovieByPage(pageNumber:String) {
-        movieViewModel.getAllMovies(API_Key,pageNumber)
-        movieViewModel.allMoviesMutableLiveData.observe(this,
-            {
-               addData(it.results)
+            }
+        }
 
-            })
+
     }
 
-
-    fun addData(listItems: List<Result>) {
-        movieAdapter.movieList.toMutableList().addAll(listItems)
-        movieAdapter.notifyDataSetChanged()
-
-    }
 
 }

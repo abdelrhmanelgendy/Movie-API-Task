@@ -19,7 +19,9 @@ interface MovieApiService {
     suspend fun searchMovie(
         @Query("api_key") apiKey: String,
         @Query("query") searchQuery: String,
-    ): Movies
+        @Query("page") pageNumber: String
+
+        ): Movies
 
     @GET("movie/{path}/videos")
     suspend fun getMovieTrailerData(

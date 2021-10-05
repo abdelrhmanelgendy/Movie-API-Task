@@ -3,15 +3,17 @@ package com.example.movietask.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.databinding.DataBindingUtil
-import com.example.movietask.BuildConfig
+import androidx.lifecycle.lifecycleScope
 import com.example.movietask.R
 import com.example.movietask.converters.MovieResultConverter
 import com.example.movietask.databinding.ActivityMovieViewerBinding
 import com.example.movietask.models.Result
 import com.example.movietask.viewmodels.MovieViewModel
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class MovieViewerActivity : AppCompatActivity() {
@@ -21,7 +23,6 @@ class MovieViewerActivity : AppCompatActivity() {
     }
 
     lateinit var movieViewerBinding: ActivityMovieViewerBinding
-    val restOfUrl = "https://image.tmdb.org/t/p/w500/"
 
     val movieViewModel by lazy {
         getViewModel<MovieViewModel>()
@@ -45,9 +46,9 @@ class MovieViewerActivity : AppCompatActivity() {
         movieViewerBinding.movieViewActivityTVMovieDetails.setText(movieResult.overview)
         movieViewerBinding.movieViewActivityTVMovieRate.setText("Rate: ${movieResult.vote_average.toString()}")
         movieViewerBinding.movieViewActivityTVMoviePupblishData.setText("Date: ${movieResult.release_date.toString()}")
-        Picasso.get().load(restOfUrl + movieResult.poster_path)
+        Picasso.get().load( movieResult.poster_path)
             .into(movieViewerBinding.movieViewActivityMainPosterImage)
-        Picasso.get().load(restOfUrl + movieResult.backdrop_path)
+        Picasso.get().load(movieResult.backdrop_path)
             .into(movieViewerBinding.movieViewActivitySecondPosterImage)
 
         movieViewerBinding.movieViewActivityMainPosterImage.setOnClickListener {
@@ -62,13 +63,14 @@ class MovieViewerActivity : AppCompatActivity() {
     }
 
     private fun openYoutubePlayer(id: Int) {
-
+        val intent = Intent(this, MovieTrailerActivity::class.java)
         movieViewModel.findMovieTrailer(API_Key, id)
-        movieViewModel.movieTrailer.observe(this, {
-            val intent = Intent(this, MovieTrailerActivity::class.java)
-            intent.putExtra(videoUrl,it.results.get(0).key)
-            startActivity(intent)
-        })
+        lifecycleScope.launch(Dispatchers.Main) {
+            movieViewModel.movieTrailerStateFlow.collect {
+                intent.putExtra(videoUrl, it.results.get(0).key)
+                startActivity(intent)
+            }
+        }
     }
 
     private fun ViewImage(posterPath: String) {

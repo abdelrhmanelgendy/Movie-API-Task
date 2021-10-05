@@ -9,8 +9,8 @@ class MovieRepository(var movieApiService: MovieApiService) {
         return movieApiService.getAllMovies(apiKey,pageNumber)
     }
 
-    suspend fun searchForMovie(apiKey: String, searchQuery: String): Movies {
-        return movieApiService.searchMovie(apiKey, searchQuery)
+    suspend fun searchForMovie(apiKey: String, searchQuery: String,pageNumber:String): Movies {
+        return movieApiService.searchMovie(apiKey, searchQuery,pageNumber)
     }
     suspend fun getVideoTrailer(apiKey: String,movieId:Int):MovieTrailer
     {

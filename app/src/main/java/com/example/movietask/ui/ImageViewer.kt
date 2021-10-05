@@ -10,14 +10,14 @@ import com.squareup.picasso.Picasso
 
 class ImageViewer : AppCompatActivity() {
     lateinit var imageViewerBinding: ActivityImageViewerBinding
-    val restOfUrl = "https://image.tmdb.org/t/p/w500/"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         imageViewerBinding = DataBindingUtil.setContentView(this, R.layout.activity_image_viewer)
 
         intent?.let {
             val imgUrl = it.getStringExtra(MovieViewerActivity.imageUrl)
-            Picasso.get().load(restOfUrl+imgUrl)
+            Picasso.get().load(imgUrl)
                 .into(imageViewerBinding.imageViewActivityMainImageView)
         }
         imageViewerBinding.imageViewActivityImageVack.setOnClickListener {
