@@ -1,5 +1,5 @@
 # Movie-API-Task
-Using IMB to create simple app contains ->.
+Using IMDB to create simple app contains ->.
 <ul>
   <li>Architecture patterns "MVVM"</li>
   <li>StateFlow</li>
